@@ -7,3 +7,6 @@ A web application which shows the content of an e-mail (.eml) as a text file (.t
 3. Using your (IDE's) terminal, go to EMLviewer/static directory and run "npm run watch".
 4. Using your (IDE's) terminal, go to EMLviewer/server directory and run "pip install flask"
 5. Using your (IDE's) terminal, go to EMLviewer/server directory and run "python server.py" to start the server.
+
+# Notes
+My virtualenv (venv) folder is not uploaded, so please check the requirements.txt file in the EMLviewer folder in order to see the packages which I have installed!
