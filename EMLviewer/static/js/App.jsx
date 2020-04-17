@@ -13,7 +13,8 @@ import HeaderBackgroundImage from '../images/header.jpg';
 // Always have to import+export the react files in order to show what they do
 export default class App extends React.Component {
 	constructor(props) {
-		super(props); // props are parameters that passed into the constructor, are public and re-rendered the UI after any update state
+		super(props); // props are parameters that passed into the constructor
+		              // are public and re-rendered the UI after any update state
 	}
 
 	// Insert the background image

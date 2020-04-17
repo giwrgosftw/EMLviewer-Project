@@ -11,15 +11,15 @@ from werkzeug.utils import secure_filename
 
 # Create our log file for tracking
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger('WELCOME')
+LOGGER = logging.getLogger('WELCOME')
 
-UPLOAD_FOLDER = './'  # Declare our local folder for uploading
-LOAD_FOLDER = '/tmp'  # Declare our local folder for loading the new version of the uploaded file type .txt
+UPLOAD_FOLDER = './'  # Our local folder for uploading
+LOAD_FOLDER = '/tmp'  # Our local folder for loading the new version of the uploaded file type .txt
 ALLOWED_EXTENSIONS = set(['eml'])  # The set of allowed file extensions (only .eml files)
 
-app = Flask(__name__, static_folder='../static/dist', template_folder='../static')
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-app.config['LOAD_FOLDER'] = LOAD_FOLDER
+APP = Flask(__name__, static_folder='../static/dist', template_folder='../static')
+APP.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+APP.config['LOAD_FOLDER'] = LOAD_FOLDER
 
 
 # Check the file type/extension
@@ -29,14 +29,14 @@ def allowed_file(filename):
 
 
 # Mapping the URL to index.html
-@app.route('/')
+@APP.route('/')
 def index():
     return render_template('index.html')
 
 
 # Mapping the URL to the function 'upload_file'
 # Call a function in one route end-point for easier unit and integration
-@app.route('/uploads', methods=['POST'])
+@APP.route('/uploads', methods=['POST'])
 def upload():
     return upload_file()
 
@@ -48,29 +48,29 @@ def upload_file():
     if not os.path.isdir(target):
         os.mkdir(target)
 
-    logger.info("Welcome to upload`")
-    file = request.files['file']
+    LOGGER.info("Welcome to upload`")
+    file_ = request.files['file']
     # Check if the file type is valid and that uploads the file
-    if file and allowed_file(file.filename):
-        filename = secure_filename(file.filename)
+    if file_ and allowed_file(file_.filename):
+        filename = secure_filename(file_.filename)
         destination = "/".join([target, filename])
-        file.save(destination)
+        file_.save(destination)
         session['uploadFilePath'] = destination
         response = "Good job"
-        os.system('python EML_converter.py')
+        os.system('python eml_converter.py')
         os.remove("./" + filename)
     return jsonify({"response": response})
 
 
 # Mapping the URL to the function 'send_file' which sends the content of a file to the client
-@app.route('/uploads/<filename>')
+@APP.route('/uploads/<filename>')
 def send_file(filename):
-    return send_from_directory(app.config['LOAD_FOLDER'],
+    return send_from_directory(APP.config['LOAD_FOLDER'],
                                filename)
 
 
 if __name__ == '__main__':
-    app.secret_key = os.urandom(24)
-    app.run()
+    APP.secret_key = os.urandom(24)
+    APP.run()
 
-# flask_cors.CORS(app, expose_headers='Authorization')
+# flask_cors.CORS(APP, expose_headers='Authorization')
