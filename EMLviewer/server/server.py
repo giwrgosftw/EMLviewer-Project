@@ -63,6 +63,7 @@ def upload_file():
         file_.save(destination)
         session['uploadFilePath'] = destination
         response = "Good job"
+        # When pressing the "Upload" button
         os.system('python eml_converter.py')
         os.system('python database.py')
         insert_blob(filename, "./" + filename)
