@@ -66,7 +66,7 @@ def upload_file():
         os.system('python eml_converter.py')
         os.system('python database.py')
         insert_blob(filename, "./" + filename)
-        # read_blob_data(filename)
+        # read_blob_data(filename)  # Outside the scope of the project
         # read_all_blob_data()  # Outside the scope of the project
         # delete_record(filename)  # Outside of scope of the project
         # delete_all_records()  # Outside of scope of the project
