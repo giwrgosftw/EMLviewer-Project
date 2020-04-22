@@ -1,4 +1,4 @@
-# EMLviewer-Project BETA
+# EMLviewer-Project
 This web application is a .eml viewer where .eml file (the e-mail) is stored in SQLite DB and the frontend shows its content as a text file (.txt)
 
 # How to run it
