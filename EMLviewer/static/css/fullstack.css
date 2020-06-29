@@ -2,11 +2,11 @@
 
 .page-header {
 	min-height: 100%;
-	text-align: center;
-	background-image: url('../images/header.jpg');
+	text-align: left;
+	background-image: url('../images/header.png');
 	background-repeat: no-repeat;
-	background-position: center;
-	background-size: cover;
+	background-position: center top;
+	background-size: auto;
 	margin-top: -15px;
 }
 .header-contents {

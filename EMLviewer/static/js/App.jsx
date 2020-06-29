@@ -3,12 +3,10 @@
 
 import React from "react";
 import Main from "./Main";
-import { PageHeader } from "react-bootstrap";
+import '../css/fullstack.css' // declare our css style
 
-require('../css/fullstack.css');
+// require('../css/fullstack.css');
 // var $ = require('jquery'); // Adding JQuery library/requirements for HTTP requests
-
-import HeaderBackgroundImage from '../images/header.jpg';
 
 // Always have to import+export the react files in order to show what they do
 export default class App extends React.Component {
@@ -17,21 +15,15 @@ export default class App extends React.Component {
 		              // are public and re-rendered the UI after any update state
 	}
 
-	// Insert the background image
-	addHeaderImg() {
-		let headerBg = new Image();
-		headerBg.src = HeaderBackgroundImage;
-	}
-
-    // Display background image and Main.jsx content
+    // Display background image and Main.jsx content with a specific format/style
 	render () {
         return (
-			<PageHeader>
-				<div className='header-contents'>
-				{this.addHeaderImg()}
+        <div className='page-header'>
+		    <div style={{ width: '80vw', marginLeft: 'auto', marginRight: 'auto', minHeight: '99vh', marginTop:'10vh', display: 'flex',  }}>
 				<Main />
-				</div>
-			</PageHeader>
+			</div>
+		</div>
 		);
     }
+
 }

@@ -1,7 +1,18 @@
 // Webpack.config.js - Bundles the modules' dependencies by creating our entry point (powerful loading)
 
 const webpack = require('webpack');
+const fs = require('fs-extra');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+
+// Fix the favicon bug, copy the favicon.ico to dist folder which is readable by html
+async function copyFiles () {
+  try {
+    await fs.copy(__dirname + '/images/favicon.ico', __dirname + '/dist/favicon.ico')
+    console.log('success!')
+  } catch (err) {
+    console.error(err)
+  }
+}
 
 const config = {
     entry:  __dirname + '/js/index.jsx',
@@ -38,3 +49,4 @@ const config = {
 };
 
 module.exports = config;
+copyFiles();

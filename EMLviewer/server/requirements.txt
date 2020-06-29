@@ -12,6 +12,7 @@ Jinja2==2.11.1
 lazy-object-proxy==1.4.3
 MarkupSafe==1.1.1
 mccabe==0.6.1
+pony==0.7.13
 pylint==1.9.5
 singledispatch==3.4.0.3
 six==1.14.0

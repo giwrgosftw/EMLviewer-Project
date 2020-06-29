@@ -2,6 +2,16 @@ import sqlite3
 import os
 import shutil
 
+"""
+The database_manager handles the functions which control the pony_database and the sqlite3 database.
+Specifically:
+    1. Creates the sqlite3 database. Specifically, its connection and the Eml Table
+    2. Converts the .eml file to binary data (else it can not be saved properly)
+    3. Inserts the .eml as BLOB to the sqlite3 database
+    4. Deletes .eml files from the pony_database/sqlite3 database
+    5. Retrieves/Extracts .eml files from the pony_database/sqlite3 database
+"""
+
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -40,15 +50,15 @@ def convert_to_binary_data(filename):
 
 
 # Inserts the selected .eml file into the database (saves as .db)
-def insert_blob(name, eml_file):
+def insert_blob(name, eml_path):
     try:
-        sqlite_connection = sqlite3.connect('database.db')
+        sqlite_connection = sqlite3.connect('database.sqlite')
         cursor = sqlite_connection.cursor()
         print("Connected to SQLite database")
-        sqlite_insert_blob_query = """ INSERT INTO eml_table
+        sqlite_insert_blob_query = """ INSERT INTO EmlTable
                                   (name, eml) VALUES (?, ?)"""
 
-        eml = convert_to_binary_data(eml_file)
+        eml = convert_to_binary_data(eml_path)
         # Convert data into tuple format
         data_tuple = (name, eml)
         cursor.execute(sqlite_insert_blob_query, data_tuple)
@@ -74,14 +84,14 @@ def write_to_file(data, filename):
 # Exports the selected .eml file from the SQLite database into the database folder
 def read_blob_data(name):
     try:
-        sqlite_connection = sqlite3.connect('database.db')
+        sqlite_connection = sqlite3.connect('database.sqlite')
         cursor = sqlite_connection.cursor()
         print("Connected to SQLite database")
 
         if not os.path.exists("./" + "database/"):
             os.makedirs("./" + "database/")
 
-        sql_fetch_blob_query = """SELECT * from eml_table where name = ?"""
+        sql_fetch_blob_query = """SELECT * from EmlTable where name = ?"""
         # executes the query against the database based on the tuple
         cursor.execute(sql_fetch_blob_query, (name,))
         # fetches all the rows of the query and returns them as a list of tuples
@@ -109,15 +119,15 @@ def read_blob_data(name):
 # Exports all the .eml files from the SQLite database into the database folder
 def read_all_blob_data():
     try:
-        sqlite_connection = sqlite3.connect('database.db')
+        sqlite_connection = sqlite3.connect('database.sqlite')
         cursor = sqlite_connection.cursor()
         print("Connected to SQLite")
 
-        cursor.execute("SELECT eml FROM eml_table")  # execute a simple SQL select query
+        cursor.execute("SELECT eml FROM EmlTable")  # execute a simple SQL select query
         # eml_ = cursor.fetchall()  # get all the results from the above query
         # Create lists in order to iterate and extract each data from each index
-        eml_list = [eml[0] for eml in cursor.execute("SELECT eml FROM eml_table")]
-        names = [name[0] for name in cursor.execute("SELECT name FROM eml_table")]
+        eml_list = [eml[0] for eml in cursor.execute("SELECT eml FROM EmlTable")]
+        names = [name[0] for name in cursor.execute("SELECT name FROM EmlTable")]
         length = len(eml_list)
         for i in range(length):
             # print(names[i])
@@ -142,12 +152,12 @@ def read_all_blob_data():
 # Deletes the selected .eml file from the SQLite database and from the database folder
 def delete_record(name):
     try:
-        sqlite_connection = sqlite3.connect('database.db')
+        sqlite_connection = sqlite3.connect('database.sqlite')
         cursor = sqlite_connection.cursor()
         print("Connected to SQLite")
 
         # Deleting single record now
-        sql_delete_blob_query = """DELETE from eml_table where name = ?"""
+        sql_delete_blob_query = """DELETE from EmlTable where name = ?"""
         cursor.execute(sql_delete_blob_query, (name,))
         sqlite_connection.commit()
 
@@ -168,12 +178,12 @@ def delete_record(name):
 # Deletes all the .eml files from the SQLite database and from the database folder (if exist)
 def delete_all_records():
     try:
-        sqlite_connection = sqlite3.connect('database.db')
+        sqlite_connection = sqlite3.connect('database.sqlite')
         cursor = sqlite_connection.cursor()
         print("Connected to SQLite database")
 
         # Deleting single record now
-        sql_delete_blob_query = """DELETE from eml_table"""
+        sql_delete_blob_query = """DELETE from EmlTable"""
         cursor.execute(sql_delete_blob_query)
         sqlite_connection.commit()
         remove_folder("./" + "database/")
@@ -189,22 +199,22 @@ def delete_all_records():
             print("The sqlite connection is closed")
 
 
-def remove_folder(path):
+def remove_folder(folder_path):
     """ param <path> could be relative """
 
     # if os.path.isfile(path):
     # os.remove(path)  # remove the file
 
-    if os.path.isdir(path):
-        shutil.rmtree(path)  # remove dir and all contains
+    if os.path.isdir(folder_path):
+        shutil.rmtree(folder_path)  # remove dir and all contains
     else:
-        raise ValueError("file {} is not a dir.".format(path))
+        raise ValueError("file {} is not a dir.".format(folder_path))
 
 
-# In case you want to delete just the content of the folder
-def remove_content(folder):
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
+# In case you just want to delete the content of the folder, not the folder itself
+def remove_content(folder_dir):
+    for filename in os.listdir(folder_dir):
+        file_path = os.path.join(folder_dir, filename)
         try:
             if os.path.isfile(file_path) or os.path.islink(file_path):
                 os.unlink(file_path)
@@ -215,9 +225,9 @@ def remove_content(folder):
 
 
 def main():
-    database = r"database.db"
+    database = r"database.sqlite"
 
-    sql_create_eml_table = """ CREATE TABLE IF NOT EXISTS eml_table (
+    sql_create_eml_table = """ CREATE TABLE IF NOT EXISTS EmlTable (
                                     name TEXT PRIMARY KEY, eml BLOB NOT NULL
                                     ); """
 
@@ -226,7 +236,7 @@ def main():
 
     # create tables
     if conn is not None:
-        # create the eml_table
+        # create the Eml Table
         create_table(conn, sql_create_eml_table)
     else:
         print("Error! Cannot create the database connection.")
