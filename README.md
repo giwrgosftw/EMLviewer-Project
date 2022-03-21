@@ -1,5 +1,5 @@
 # EMLviewer-Project
-This web application is an EML-viewer where the .eml file (the e-mail) is stored in SQLite DB and the frontend shows its content as a text file. 
+This web application is an EML-viewer where the .eml file (the e-mail) is stored in SQLite DB and the frontend/GUI shows its content as a text file. 
 I used Python-Flask, React.js and PonyORM. It has been tested and works perfectly in python v2.7 (you can find python v2.7 here → https://1drv.ms/u/s!As6B4RGbfxQVgYw4A4mkjuYw_3b4wA?e=agQ6Xg) !
 
 # How to run it
@@ -21,5 +21,5 @@ I used Python-Flask, React.js and PonyORM. It has been tested and works perfectl
 # Notes
 My virtualenv (venv) folder is not uploaded. So, BEFORE install the "requirements.txt" from the EMLviewer/server folder, create a virtual environment using pyCharm on your production server (check here how: https://www.jetbrains.com/help/pycharm/creating-virtual-environment.html)
 
-# Video link
+# Demo video link
 https://youtu.be/BYUfmsNCzwg
