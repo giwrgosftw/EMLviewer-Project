@@ -4,7 +4,7 @@ Click==7.0
 configparser==4.0.2
 enum34==1.1.10
 Flask==2.3.2
-Flask-Cors==3.0.9
+Flask-Cors==4.0.1
 futures==3.3.0
 isort==4.3.21
 itsdangerous==1.1.0
